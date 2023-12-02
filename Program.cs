@@ -12,7 +12,8 @@ namespace sharp {
             Console.WriteLine("Choose an option:");
             Console.WriteLine("1) Add Bike");
             Console.WriteLine("2) List Bikes");
-            Console.WriteLine("3) Exit");
+            Console.WriteLine("3) Delete Bike");
+            Console.WriteLine("4) Exit");
             Console.Write("\r\nSelect an option: ");
  
             switch (Console.ReadLine())
@@ -25,6 +26,9 @@ namespace sharp {
                     Console.ReadKey();
                     return true;
                 case "3":
+                    DeleteBike();
+                    return true;
+                case "4":
                     return false;
                 default:
                     return true;
@@ -33,8 +37,11 @@ namespace sharp {
 
         static void AddBike() {
             using var db = new BikeContext();
+            Console.WriteLine("Manufacturer:");
             string Manufacturer = Console.ReadLine();
+            Console.WriteLine("Model:");
             string Model = Console.ReadLine();
+            Console.WriteLine("Type:");
             string Type = Console.ReadLine();
             
             db.Add(new Bike { Manufacturer = Manufacturer, Model = Model, Type = Type});
@@ -47,6 +54,16 @@ namespace sharp {
             foreach( var bike in bikes) {
                 Console.WriteLine($"|ID: {bike.BikeId}|Manufactuer: {bike.Manufacturer}|Model: {bike.Model}|Type: {bike.Type}|");
             }
+
+        }
+        static void DeleteBike() {
+            using var db = new BikeContext();
+            ListBikes();
+            Console.WriteLine("Bike ID:");
+            int BikeId = int.Parse(Console.ReadLine());
+            var bike = db.Bikes.Find(BikeId);
+            db.Remove(bike);
+            db.SaveChanges();
 
         }
         
